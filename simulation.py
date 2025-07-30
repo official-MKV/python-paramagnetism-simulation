@@ -40,8 +40,8 @@ class ParamagneticSimulation:
                 }
             field_response[f'T_{temp}K'] = temp_data
         
-        # Non-linear field response (addresses gap: advanced field patterns)
-        H_nonlinear = H_range ** 1.1  # Slight non-linearity for realistic behavior
+      
+        H_nonlinear = H_range ** 1.1  
         nonlinear_response = {}
         for material in self.materials:
             M_nonlinear = compute_magnetization(H_nonlinear, material, 300)
@@ -78,7 +78,7 @@ class ParamagneticSimulation:
         frequency_analysis = {}
         thickness_analysis = {}
         
-        # Frequency response analysis
+        
         for freq in frequencies:
             t, H_t = generate_sinusoidal_field(H0, freq, duration)
             freq_data = {}
@@ -100,14 +100,14 @@ class ParamagneticSimulation:
                 }
             frequency_analysis[f'freq_{freq}Hz'] = freq_data
         
-        # Thickness effects analysis (addresses gap: thickness optimization)
+      
         for thickness in thickness_range:
             thickness_data = {}
             for material in self.materials:
-                # Thickness affects effective volume and thus magnetization
-                volume_factor = thickness / thickness_range[0]  # Normalized to thinnest
+               
+                volume_factor = thickness / thickness_range[0]  
                 
-                # Simulate skin depth effects at high frequency
+               
                 skin_depth = self._calculate_skin_depth(material, 100)  # at 100 Hz
                 effective_thickness = min(thickness, 2 * skin_depth)
                 thickness_factor = effective_thickness / thickness
@@ -145,7 +145,7 @@ class ParamagneticSimulation:
         
         sensor_optimization = {}
         
-        # Geometry-dependent sensitivity analysis (addresses gap: sensor optimization)
+       
         for geometry in sensor_geometries:
             geometry_data = {}
             geometry_factor = self._get_geometry_factor(geometry)
@@ -159,11 +159,7 @@ class ParamagneticSimulation:
                     
                     for H in field_range:
                         M = compute_magnetization(np.array([H]), material)[0]
-                        
-                        # Apply geometry factor to sensitivity
                         effective_sensitivity = M * geometry_factor
-                        
-                        # Calculate SNR with geometry considerations
                         signal_power = np.sqrt(effective_sensitivity**2)
                         snr = 20 * np.log10(signal_power / noise_level) if noise_level > 0 else float('inf')
                         
@@ -349,7 +345,7 @@ class ParamagneticSimulation:
         """Get sensitivity factor based on sensor geometry."""
         factors = {
             'planar': 1.0,
-            'cylindrical': 1.3,  # Better field coupling
+            'cylindrical': 1.3,   
             'spherical': 1.1
         }
         return factors.get(geometry, 1.0)
@@ -480,7 +476,7 @@ class ParamagneticSimulation:
         print("- Advanced SNR analysis")
 
 def run_paramagnetic_simulation():
-    """Run the complete paramagnetic simulation."""
+    """Run the complete paramagnetic simulation - UPDATED FOR 4-WINDOW SYSTEM."""
     print("Paramagnetic Simulation System")
     print("Addressing ALL Project Objectives")
     print("=" * 50)
@@ -492,21 +488,21 @@ def run_paramagnetic_simulation():
         # Run complete analysis
         results = sim.run_complete_analysis()
         
-        # Import and create visualization
+        # Import and create NEW 4-window visualization system
         from visualization import Visualization
         viz = Visualization()
-        fig = viz.create_dashboard(results, sim.materials)
         
-        import matplotlib.pyplot as plt
-        plt.show()
+        # Create all 4 dashboard windows instead of single dashboard
+        figures = viz.create_all_dashboards(results, sim.materials)
         
         print("\n" + "=" * 50)
         print("PARAMAGNETIC ANALYSIS COMPLETE")
         print("=" * 50)
-        print("ALL VISUALIZATIONS IN SINGLE WINDOW")
+        print(f"CREATED {len(figures)} VISUALIZATION WINDOWS")
         print("ADDRESSING ALL PROJECT OBJECTIVES WITH ENHANCEMENTS")
         
-        return results, fig
+        # Return results and the figures dictionary (not single fig)
+        return results, figures
         
     except Exception as e:
         print(f"Error during simulation: {e}")
@@ -515,4 +511,10 @@ def run_paramagnetic_simulation():
 
 # For compatibility when run directly
 if __name__ == "__main__":
-    run_paramagnetic_simulation()
+    results, figures = run_paramagnetic_simulation()
+    if figures:
+        # Show all windows if run directly
+        import matplotlib.pyplot as plt
+        for name, fig in figures.items():
+            fig.show()
+        plt.show()

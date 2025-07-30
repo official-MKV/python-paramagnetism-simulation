@@ -1,0 +1,136 @@
+PARAMAGNETIC SIMULATION - VALUE RANGES AND PARAMETERS
+=======================================================
+
+OBJECTIVES:
+-----------
+1. Field Response Analysis
+2. Field Strength & Frequency Analysis  
+3. Sensor Sensitivity Optimization
+4. Actuator Precision Optimization
+5. Validation using Theoretical Models
+
+MATERIALS:
+----------
+- Aluminum:
+  * Susceptibility: 2.2e-5
+  * Density: 2700 kg/m³
+  * Curie Constant: 6.6e-3 (2.2e-5 * 300)
+
+- Magnesium:
+  * Susceptibility: 1.2e-5
+  * Density: 1740 kg/m³
+  * Curie Constant: 3.6e-3 (1.2e-5 * 300)
+
+TEMPERATURE RANGES:
+-------------------
+- Default Range: [250, 300, 350, 400] K
+- Validation Range: 250-400 K (20 points)
+- Room Temperature Reference: 300 K
+
+MAGNETIC FIELD RANGES:
+----------------------
+- Static Field Maximum (H_max): 1e6 A/m (default)
+- Static Field Points: 100 (default)
+- Test Field Range: 1e4 to 1e6 A/m (linear, 50-100 points)
+- Sinusoidal Field Amplitude (H0): 1e5 A/m (default)
+- Nonlinear Field: H^1.1 transformation
+
+FREQUENCY RANGES:
+-----------------
+- Default Frequencies: [0.1, 1, 10, 50, 100, 500] Hz
+- Duration: 2.0 seconds (default)
+- Time Step (dt): 1e-4 seconds
+- Skin Depth Calculation Frequency: 100 Hz (reference)
+
+NOISE LEVELS:
+-------------
+- Sensor Noise Levels: [0.001, 0.01, 0.1]
+- Gaussian Noise: Mean=0, Std=noise_level
+- SNR Calculation: 20*log10(signal_power/noise_std)
+
+THICKNESS RANGES:
+-----------------
+- Material Thickness: [1e-3, 5e-3, 10e-3] m (1mm, 5mm, 10mm)
+- Volume Factor: thickness/thickness_min
+- Skin Depth Effects: min(thickness, 2*skin_depth)
+
+SENSOR PARAMETERS:
+------------------
+- Geometries: ['planar', 'cylindrical', 'spherical']
+- Geometry Factors:
+  * Planar: 1.0
+  * Cylindrical: 1.3
+  * Spherical: 1.1
+- Sensitivity: 1.0 (default)
+
+ACTUATOR PARAMETERS:
+--------------------
+- Sample Volume: 1e-6 m³ (default)
+- Spring Constants: [1e-3, 5e-3, 1e-2] N/m
+- Control Systems: ['open_loop', 'pid_control']
+- Field Gradient: 2*H*1e3 (simplified)
+
+CONTROL SYSTEM PARAMETERS:
+--------------------------
+Open Loop:
+- Response Time: 0.1 s
+- Settling Time: 0.5 s  
+- Overshoot: 5%
+
+PID Control:
+- Kp: 10 * susceptibility / 1e-5
+- Ki: 1.0
+- Kd: 0.1
+- Response Time: 0.05 s
+- Settling Time: 0.2 s
+- Overshoot: 2%
+
+CONDUCTIVITY VALUES:
+--------------------
+- Aluminum: 3.5e7 S/m
+- Magnesium: 2.2e7 S/m
+
+PHYSICAL CONSTANTS:
+-------------------
+- Permeability of Free Space (μ₀): 4π × 1e-7 H/m
+- Relative Permeability (μᵣ): 1 + susceptibility
+
+LITERATURE COMPARISON VALUES:
+-----------------------------
+Aluminum:
+- Literature Susceptibility: 2.2e-5
+- Literature Density: 2700 kg/m³
+- Temperature Coefficient: -1 (1/T dependence)
+
+Magnesium:
+- Literature Susceptibility: 1.2e-5
+- Literature Density: 1740 kg/m³  
+- Temperature Coefficient: -1 (1/T dependence)
+
+VALIDATION CRITERIA:
+--------------------
+- Curie Law Validation: χ = C/T
+- Test Field: 1e5 A/m
+- Accuracy Levels:
+  * EXCELLENT: <1% error
+  * GOOD: <5% error  
+  * ACCEPTABLE: ≥5% error
+
+PHASE LAG CALCULATION:
+----------------------
+- Phase Lag: 0.1 * log10(frequency) for f > 1 Hz
+- Phase Lag: 0 for f ≤ 1 Hz
+
+CANTILEVER DYNAMICS:
+--------------------
+- Mass: Variable (not specified in defaults)
+- Damping: Variable (not specified in defaults)
+- Integration Method: Euler
+- Force-Displacement Relation: x = F/k
+
+FILE OUTPUT OPTIONS:
+--------------------
+- Results File: simulation_results.pkl
+- Visualization File: paramagnetic_simulation_results.png
+- DPI: 300
+- Format: PNG with tight bounding box
